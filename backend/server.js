@@ -16,6 +16,25 @@ app.get('/', (req, res) => {
   res.json({ mensagem: 'Sistema de Açaí - Backend Online!' });
 });
 
+// Rota raiz para verificar se está online
+app.get('/', (req, res) => {
+  res.json({ 
+    mensagem: 'Sistema de Açaí - Backend Online!',
+    status: 'operacional',
+    versao: '1.0.0',
+    rotas: {
+      pedidos: '/api/pedidos',
+      novo_pedido: '/api/pedidos/novo',
+      relatorio: '/api/pedidos/relatorio/diario'
+    }
+  });
+});
+
+// Esta linha deve vir DEPOIS de todas as rotas
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
+
 // Iniciar servidor
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
