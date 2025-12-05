@@ -1,43 +1,34 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
-const pedidosRoutes = require('./src/routes/pedidos');
 
 // Configurações
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rotas
+const pedidosRoutes = require(path.join(__dirname, 'src', 'routes', 'pedidos'));
 app.use('/api/pedidos', pedidosRoutes);
 
 // Rota inicial
-app.get('/', (req, res) => {
-  res.json({ mensagem: 'Sistema de Açaí - Backend Online!' });
-});
-
-// Rota raiz para verificar se está online
 app.get('/', (req, res) => {
   res.json({ 
     mensagem: 'Sistema de Açaí - Backend Online!',
     status: 'operacional',
     versao: '1.0.0',
-    rotas: {
-      pedidos: '/api/pedidos',
-      novo_pedido: '/api/pedidos/novo',
-      relatorio: '/api/pedidos/relatorio/diario'
-    }
+    ambiente: process.env.NODE_ENV || 'desenvolvimento'
   });
-});
-
-// Esta linha deve vir DEPOIS de todas as rotas
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📱 Acesse: http://localhost:${PORT}`);
+  console.log(`📱 Ambiente: ${process.env.NODE_ENV || 'desenvolvimento'}`);
 });

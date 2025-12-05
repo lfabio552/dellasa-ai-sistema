@@ -1,6 +1,7 @@
 const express = require('express');
+const path = require('path');
 const router = express.Router();
-const Pedido = require('../models/Pedido');
+const Pedido = require(path.join(__dirname, '..', 'models', 'Pedido'));
 
 // GET: Listar todos os pedidos
 router.get('/', (req, res) => {
@@ -10,7 +11,11 @@ router.get('/', (req, res) => {
     } else {
       // Converter itens de string JSON para objeto
       pedidos.forEach(p => {
-        p.itens = JSON.parse(p.itens);
+        try {
+          p.itens = JSON.parse(p.itens);
+        } catch (e) {
+          p.itens = [];
+        }
       });
       res.json(pedidos);
     }
@@ -24,7 +29,11 @@ router.get('/status/:status', (req, res) => {
       res.status(500).json({ erro: 'Erro ao buscar pedidos' });
     } else {
       pedidos.forEach(p => {
-        p.itens = JSON.parse(p.itens);
+        try {
+          p.itens = JSON.parse(p.itens);
+        } catch (e) {
+          p.itens = [];
+        }
       });
       res.json(pedidos);
     }
