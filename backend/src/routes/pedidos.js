@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const Pedido = require(path.join(__dirname, '..', 'models', 'Pedido'));
+const Pedido = require(path.join(__dirname, '..', 'models', 'Pedido.js'));
 
 // GET: Listar todos os pedidos
 router.get('/', (req, res) => {
