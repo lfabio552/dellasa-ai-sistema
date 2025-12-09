@@ -4,7 +4,7 @@
   "description": "Sistema de pedidos para loja de açaí",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-simples.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
