@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 // URL da API
-const API_URL = 'https://dellasa-ai-sistema.vercel.app/api';
+const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
 
 // Componente Card de Pedido
 const PedidoCard = ({ pedido, onStatusChange }) => {
