@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 // ==========================================
 // ROTAS DA API
 // ==========================================
-const pedidosRoutes = require('./src/routes/Pedidos');
+const pedidosRoutes = require('./src/routes/Pedidos.js'); // ✅ CORRIGIDO: adicionado .js
 app.use('/api/pedidos', pedidosRoutes);
 
 // ==========================================
