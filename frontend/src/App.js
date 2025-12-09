@@ -360,18 +360,62 @@ function App() {
   const [pedidos, setPedidos] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
-  // Carregar pedidos
-  const carregarPedidos = async () => {
-    try {
-      setCarregando(true);
-      const response = await axios.get(`${API_URL}/pedidos`);
-      setPedidos(response.data);
-    } catch (erro) {
-      console.error('Erro ao carregar pedidos:', erro);
-    } finally {
-      setCarregando(false);
+  // CARREGAR PEDIDOS - VERSÃO SEGURA E ROBUSTA
+const carregarPedidos = async () => {
+  try {
+    setCarregando(true);
+    console.log('🔍 Buscando pedidos da API:', `${API_URL}/pedidos`);
+    
+    const response = await axios.get(`${API_URL}/pedidos`);
+    console.log('✅ Resposta da API recebida:', response.data);
+    
+    // 🔒 PROTEÇÃO CRÍTICA 1: Garante que os dados sejam um ARRAY
+    let dadosRecebidos = response.data;
+    
+    if (!Array.isArray(dadosRecebidos)) {
+      console.error('⚠️ ERRO: API não retornou um array. Dados recebidos:', dadosRecebidos);
+      dadosRecebidos = []; // Força um array vazio para não quebrar
     }
-  };
+    
+    // 🔒 PROTEÇÃO CRÍTICA 2: Converte itens de string JSON para objeto
+    const pedidosConvertidos = dadosRecebidos.map(pedido => {
+      // Clona o pedido para não modificar o original
+      const pedidoProcessado = { ...pedido };
+      
+      try {
+        // Se 'itens' for uma string, tenta converter para objeto/array
+        if (pedidoProcessado.itens && typeof pedidoProcessado.itens === 'string') {
+          pedidoProcessado.itens = JSON.parse(pedidoProcessado.itens);
+        }
+        // Se 'itens' não existir ou for inválido, define como array vazio
+        if (!pedidoProcessado.itens || !Array.isArray(pedidoProcessado.itens)) {
+          pedidoProcessado.itens = [];
+        }
+      } catch (erroParse) {
+        console.warn(`⚠️ Não foi possível processar itens do pedido ${pedidoProcessado.id}:`, erroParse);
+        pedidoProcessado.itens = [];
+      }
+      
+      return pedidoProcessado;
+    });
+    
+    console.log(`📦 ${pedidosConvertidos.length} pedidos processados com sucesso`);
+    setPedidos(pedidosConvertidos);
+    
+  } catch (erro) {
+    // 🔒 PROTEÇÃO CRÍTICA 3: Trata erros de rede ou da API
+    console.error('❌ Erro ao carregar pedidos:', erro);
+    console.error('Detalhes do erro:', erro.response?.data || erro.message);
+    
+    // Mesmo com erro, define array vazio para manter a interface funcional
+    setPedidos([]);
+    
+    // Mensagem amigável (opcional)
+    alert('Não foi possível carregar os pedidos no momento. O sistema continuará funcionando com uma lista vazia.');
+  } finally {
+    setCarregando(false);
+  }
+};
 
   // Mudar status do pedido
   const mudarStatus = async (id, novoStatus) => {
