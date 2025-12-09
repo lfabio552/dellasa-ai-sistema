@@ -921,4 +921,74 @@ function App() {
               <div className="resumo-desc">(Dinheiro, PIX, Débito)</div>
             </div>
             
-            <div className="res
+            <div className="resumo-card">
+              <div className="resumo-titulo">📅 A Receber (30 dias)</div>
+              <div className="resumo-valor">R$ {aReceber30Dias.toFixed(2)}</div>
+              <div className="resumo-desc">(Cartão Crédito, Alelo)</div>
+            </div>
+            
+            <div className="resumo-card">
+              <div className="resumo-titulo">📝 A Prazo</div>
+              <div className="resumo-valor">R$ {aPrazoHoje.toFixed(2)}</div>
+              <div className="resumo-desc">(Clientes Fiéis)</div>
+            </div>
+            
+            <div className="resumo-card">
+              <div className="resumo-titulo">👥 Total Devido</div>
+              <div className="resumo-valor">
+                R$ {clientesFieis.reduce((soma, c) => soma + (c.saldo_atual > 0 ? c.saldo_atual : 0), 0).toFixed(2)}
+              </div>
+              <div className="resumo-desc">Por todos clientes</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Lista de Clientes Fiéis (resumo) */}
+        {clientesFieis.length > 0 && (
+          <section className="clientes-section">
+            <h3><i className="fas fa-users"></i> Clientes Fiéis</h3>
+            <div className="clientes-grid">
+              {clientesFieis.slice(0, 5).map(cliente => (
+                <div key={cliente.id} className="cliente-card">
+                  <div className="cliente-nome">{cliente.nome}</div>
+                  <div className={`cliente-saldo ${cliente.saldo_atual > 0 ? 'negativo' : 'positivo'}`}>
+                    R$ {Math.abs(cliente.saldo_atual).toFixed(2)}
+                  </div>
+                  <button 
+                    onClick={() => verFichaCliente(cliente.id)}
+                    className="btn-ver-ficha"
+                  >
+                    Ver Ficha
+                  </button>
+                </div>
+              ))}
+              
+              {clientesFieis.length > 5 && (
+                <div className="cliente-card mais-clientes">
+                  <div className="cliente-nome">+ {clientesFieis.length - 5} outros</div>
+                  <div className="cliente-desc">Clientes cadastrados</div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+      </main>
+
+      {/* Modal da Ficha do Cliente */}
+      {mostrarModalFicha && clienteFicha && (
+        <ModalFichaCliente 
+          cliente={clienteFicha}
+          onClose={() => setMostrarModalFicha(false)}
+          onPagar={registrarPagamento}
+        />
+      )}
+
+      {/* Rodapé */}
+      <footer className="app-footer">
+        <p>Sistema Dellas Açaí | Backend: Render | Frontend: Vercel | {new Date().getFullYear()}</p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
