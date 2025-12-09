@@ -1,34 +1,23 @@
-const express = require('express');
+// Substitua a linha que contém app.use(cors(...)) por isso:
 const cors = require('cors');
-const path = require('path');
-const app = express();
 
-// Configurações
+// Configure os domínios permitidos
+const allowedOrigins = [
+    'http://localhost:3000', // Para desenvolvimento local
+    'https://dellasa-ai-sistema.vercel.app', // SUA URL DO VERCEL - ATUALIZE AQUI!
+    'https://dellasa-ai-sistema-*.vercel.app' // Permite todas as sub-URLs do Vercel
+];
+
 app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+    origin: function (origin, callback) {
+        // Permite requisições sem 'origin' (como apps mobile ou curl)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.some(allowedUrl => origin.startsWith(allowedUrl.replace('*', '')))) {
+            callback(null, true);
+        } else {
+            callback(new Error('Não permitido por CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Rotas
-const pedidosRoutes = require(path.join(__dirname, 'src', 'routes', 'pedidos'));
-app.use('/api/pedidos', pedidosRoutes);
-
-// Rota inicial
-app.get('/', (req, res) => {
-  res.json({ 
-    mensagem: 'Sistema de Açaí - Backend Online!',
-    status: 'operacional',
-    versao: '1.0.0',
-    ambiente: process.env.NODE_ENV || 'desenvolvimento'
-  });
-});
-
-// Iniciar servidor
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📱 Ambiente: ${process.env.NODE_ENV || 'desenvolvimento'}`);
-});
