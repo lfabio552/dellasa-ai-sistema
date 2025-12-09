@@ -855,7 +855,19 @@ function App() {
 
       <main className="app-main">
         {/* Botão Novo Pedido */}
-        <NovoPedidoForm 
+        <NovoPedidoForm
+  {/* Logo após o NovoPedidoForm, adicione: */}
+<div className="botoes-principais">
+  <NovoPedidoForm 
+    onNovoPedido={criarNovoPedido} 
+    clientesFieis={clientesFieis}
+  />
+  
+  <GerenciarClientesFieis 
+    clientesFieis={clientesFieis}
+    onAtualizarLista={carregarClientesFieis}
+  />
+</div>
           onNovoPedido={criarNovoPedido} 
           clientesFieis={clientesFieis}
         />
