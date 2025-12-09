@@ -1,0 +1,737 @@
+/* Reset e configurações gerais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  color: #333;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(135deg, #8A2BE2, #4B0082);
+  color: white;
+  padding: 25px 30px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 30px;
+}
+
+.header-content h1 {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-content p {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+.acai-icon {
+  color: #FF6B6B;
+}
+
+.header-stats {
+  display: flex;
+  gap: 25px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  min-width: 140px;
+}
+
+.stat-value {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+/* Main content */
+.app-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+/* Botão Novo Pedido */
+.novo-pedido-container {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.btn-novo-pedido {
+  background: linear-gradient(135deg, #8A2BE2, #4B0082);
+  color: white;
+  border: none;
+  padding: 18px 35px;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-novo-pedido:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+}
+
+.btn-novo-pedido:active {
+  transform: translateY(-1px);
+}
+
+/* Modal do formulário */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.modal-header h3 {
+  color: #333;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-fechar {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.btn-fechar:hover {
+  background: #f5f5f5;
+}
+
+/* Formulário */
+.modal form {
+  padding: 30px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #555;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1em;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #8A2BE2;
+}
+
+.item-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.item-nome {
+  flex: 3;
+}
+
+.item-preco {
+  flex: 1;
+}
+
+.btn-remover-item {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+  min-width: 45px;
+}
+
+.btn-remover-item:hover {
+  background: #ff5252;
+}
+
+.btn-add-item {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95em;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.btn-add-item:hover {
+  background: #45a049;
+}
+
+.form-total {
+  text-align: right;
+  font-size: 1.4em;
+  color: #333;
+  margin: 25px 0;
+  padding: 18px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+}
+
+.form-botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+.btn-cancelar:hover {
+  background: #5a6268;
+}
+
+.btn-salvar {
+  background: linear-gradient(135deg, #8A2BE2, #4B0082);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+
+.btn-salvar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+}
+
+/* Seção de Abas */
+.abas-section {
+  margin: 40px 0;
+}
+
+.abas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 1300px) {
+  .abas-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cada Aba */
+.aba {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.aba:hover {
+  transform: translateY(-5px);
+}
+
+.aba-header {
+  color: white;
+  padding: 20px 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.aba-header h3 {
+  font-size: 1.3em;
+  margin: 0;
+  flex: 1;
+}
+
+.aba-header i {
+  font-size: 1.3em;
+}
+
+.contador {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.aba-conteudo {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.sem-pedidos {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.sem-pedidos i {
+  font-size: 3em;
+  opacity: 0.5;
+}
+
+.sem-pedidos p {
+  font-size: 1.1em;
+}
+
+/* Card de Pedido */
+.pedido-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s;
+  border: 1px solid #eee;
+}
+
+.pedido-card:hover {
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pedido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.pedido-numero {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pedido-status {
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pedido-cliente {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pedido-telefone {
+  background: #e9ecef;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pedido-itens {
+  margin-bottom: 15px;
+}
+
+.pedido-itens ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.pedido-itens li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pedido-itens li:last-child {
+  border-bottom: none;
+}
+
+.item-preco {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.pedido-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pedido-valor,
+.pedido-pagamento,
+.pedido-horario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 0.95em;
+}
+
+.pedido-valor {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.pedido-observacoes {
+  margin-top: 15px;
+  padding: 12px;
+  background: #fff8e1;
+  border-left: 4px solid #ffd166;
+  border-radius: 8px;
+  font-size: 0.95em;
+  color: #666;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pedido-acoes {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pedido-acoes button {
+  flex: 1;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s;
+  min-width: 120px;
+}
+
+.btn-producao {
+  background: #ffd166;
+  color: #333;
+}
+
+.btn-producao:hover {
+  background: #ffc145;
+  transform: translateY(-2px);
+}
+
+.btn-pronto {
+  background: #06d6a0;
+  color: white;
+}
+
+.btn-pronto:hover {
+  background: #05c590;
+  transform: translateY(-2px);
+}
+
+.btn-entregue {
+  background: #118ab2;
+  color: white;
+}
+
+.btn-entregue:hover {
+  background: #0f7a9e;
+  transform: translateY(-2px);
+}
+
+.btn-cancelar {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+/* Seção de Resumo */
+.resumo-section {
+  margin-top: 40px;
+}
+
+.resumo-section h3 {
+  color: #333;
+  font-size: 1.5em;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.resumo-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.resumo-card:hover {
+  border-color: #8A2BE2;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15);
+}
+
+.resumo-titulo {
+  color: #666;
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.resumo-valor {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #8A2BE2;
+}
+
+/* Estado de Carregamento */
+.carregando {
+  text-align: center;
+  padding: 60px;
+  font-size: 1.2em;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.carregando i {
+  font-size: 3em;
+  color: #8A2BE2;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 25px;
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 50px;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .abas-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-stats {
+    justify-content: center;
+  }
+  
+  .stat-item {
+    min-width: 120px;
+  }
+  
+  .modal {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .item-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .item-nome,
+  .item-preco {
+    width: 100%;
+  }
+  
+  .pedido-acoes button {
+    min-width: 100%;
+  }
+  
+  .pedido-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content h1 {
+    font-size: 1.7em;
+  }
+  
+  .resumo-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-botoes {
+    flex-direction: column;
+  }
+  
+  .btn-cancelar,
+  .btn-salvar {
+    width: 100%;
+  }
+}
