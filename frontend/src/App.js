@@ -856,11 +856,10 @@ function App() {
       <main className="app-main">
         {/* Botão Novo Pedido */}
         <NovoPedidoForm
-  {/* Logo após o NovoPedidoForm, adicione: */}
-<div className="botoes-principais">
-  <NovoPedidoForm 
-    onNovoPedido={criarNovoPedido} 
-    clientesFieis={clientesFieis}
+      <div className="botoes-principais">
+        <NovoPedidoForm 
+        onNovoPedido={criarNovoPedido} 
+        clientesFieis={clientesFieis}
   />
   
   <GerenciarClientesFieis 
