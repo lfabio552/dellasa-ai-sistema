@@ -7,8 +7,9 @@ const app = express();
 // CONFIGURAÇÃO CORS (CRÍTICA PARA O FRONTEND)
 // ==========================================
 const allowedOrigins = [
-    'http://localhost:3000', // Para desenvolvimento local
-    'https://dellasa-ai-sistema.vercel.app' // SUA URL DO VERCEL
+    'http://localhost:3000',
+    'https://dellasa-ai-sistema.vercel.app', // Sua URL principal
+    'https://dellasa-ai-sistema-*.vercel.app' // Permite todas as sub-URLs do Vercel
 ];
 
 app.use(cors({
