@@ -49,6 +49,9 @@ app.use(express.urlencoded({ extended: true }));
 const pedidosRoutes = require('./src/routes/Pedidos.js');
 app.use('/api/pedidos', pedidosRoutes);
 
+const clientesFieisRoutes = require('./src/routes/ClientesFieis.js');
+app.use('/api/clientes-fieis', clientesFieisRoutes);
+
 // ==========================================
 // ROTAS PARA CLIENTES FIÉIS (alias para facilitar)
 // ==========================================
