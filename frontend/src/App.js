@@ -4,6 +4,8 @@ import './App.css';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
+const [mostrarModalClientes, setMostrarModalClientes] = useState(false);
+const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
 
 // ==========================================
 // COMPONENTE: Card de Pedido
@@ -850,6 +852,14 @@ function App() {
             <div className="stat-value">{clientesFieis.length}</div>
             <div className="stat-label">Clientes Fiéis</div>
           </div>
+          <div className="header-actions">
+  <button 
+    onClick={() => setMostrarModalClientes(true)}
+    className="btn-gerenciar-clientes"
+  >
+    <i className="fas fa-users"></i> Gerenciar Clientes
+  </button>
+</div>
         </div>
       </header>
 
