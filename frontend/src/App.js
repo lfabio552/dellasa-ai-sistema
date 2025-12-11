@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import ModalCliente from './components/ModalCliente';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
@@ -215,6 +216,8 @@ function App() {
   const [clientesFieis, setClientesFieis] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [carregandoClientes, setCarregandoClientes] = useState(false);
+  const [mostrarModalCliente, setMostrarModalCliente] = useState(false);
+  const [clientesCadastrados, setClientesCadastrados] = useState([]);
 
   // ==========================================
   // FUNÇÃO: Carregar Pedidos
@@ -384,10 +387,10 @@ function App() {
         {/* Botão para cadastrar clientes (SIMPLE) */}
         <div style={{ marginTop: '20px' }}>
           <button 
-            onClick={() => alert('Funcionalidade em desenvolvimento')}
-            className="btn-gerenciar-clientes"
-          >
-            <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
+        onClick={() => setMostrarModalCliente(true)}
+          className="btn-gerenciar-clientes"
+            >
+      <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
           </button>
         </div>
       </header>
@@ -498,6 +501,19 @@ function App() {
         <p style={{ fontSize: '0.8em', marginTop: '10px' }}>
           <i className="fas fa-tools"></i> Cadastro de clientes fiéis em breve
         </p>
+
+        {mostrarModalCliente && (
+  <ModalCliente 
+    onClose={() => setMostrarModalCliente(false)}
+    onClienteCadastrado={(novoCliente) => {
+      // Atualiza a lista de clientes
+      setClientesCadastrados(prev => [...prev, novoCliente]);
+      // Recarrega a lista de clientes do backend
+      carregarClientesFieis();
+    }}
+  />
+)}
+  
       </footer>
     </div>
   );
