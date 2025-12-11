@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import GerenciarClientes from './components/GerenciarClientes';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
 const [mostrarModalClientes, setMostrarModalClientes] = useState(false);
 const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
+const [mostrarGerenciarClientes, setMostrarGerenciarClientes] = useState(false);
 
 // ==========================================
 // COMPONENTE: Card de Pedido
@@ -861,6 +863,14 @@ function App() {
   </button>
 </div>
         </div>
+      <div className="header-actions">
+  <button 
+    onClick={() => setMostrarGerenciarClientes(true)}
+    className="btn-gerenciar-clientes"
+  >
+    <i className="fas fa-users"></i> Gerenciar Clientes
+  </button>
+</div>
       </header>
 
       <main className="app-main">
@@ -1007,6 +1017,22 @@ function App() {
       {/* Rodapé */}
       <footer className="app-footer">
         <p>Sistema Dellas Açaí | Backend: Render | Frontend: Vercel | {new Date().getFullYear()}</p>
+
+        {mostrarGerenciarClientes && (
+  <GerenciarClientes 
+    onClose={() => setMostrarGerenciarClientes(false)}
+    onClienteSelecionado={(cliente) => {
+      // Preenche automaticamente no formulário de pedido
+      setFormData?.({
+        ...formData,
+        cliente_fiel_id: cliente.id,
+        cliente_nome: cliente.nome,
+        cliente_telefone: cliente.telefone,
+        forma_pagamento: 'a_prazo'
+      });
+    }}
+  />
+)}
       </footer>
     </div>
   );
