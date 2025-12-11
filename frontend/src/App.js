@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import GerenciarClientes from './components/GerenciarClientes';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
-const [mostrarModalClientes, setMostrarModalClientes] = useState(false);
-const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
-const [mostrarGerenciarClientes, setMostrarGerenciarClientes] = useState(false);
 
 // ==========================================
 // COMPONENTE: Card de Pedido
@@ -212,427 +208,13 @@ const Aba = ({ titulo, status, pedidos, onStatusChange, onVerFicha, icone, cor }
 };
 
 // ==========================================
-// COMPONENTE: Modal de Ficha do Cliente
-// ==========================================
-const ModalFichaCliente = ({ cliente, onClose, onPagar }) => {
-  const [mostrarFormPagamento, setMostrarFormPagamento] = useState(false);
-  const [valorPagamento, setValorPagamento] = useState('');
-  const [formaPagamento, setFormaPagamento] = useState('dinheiro');
-  
-  if (!cliente) return null;
-  
-  const handlePagar = () => {
-    if (!valorPagamento || parseFloat(valorPagamento) <= 0) {
-      alert('Digite um valor válido para o pagamento');
-      return;
-    }
-    
-    if (parseFloat(valorPagamento) > cliente.saldo_atual) {
-      alert(`O valor (R$ ${valorPagamento}) é maior que o saldo devido (R$ ${cliente.saldo_atual})`);
-      return;
-    }
-    
-    onPagar(cliente.id, parseFloat(valorPagamento), formaPagamento);
-    setMostrarFormPagamento(false);
-    setValorPagamento('');
-  };
-  
-  return (
-    <div className="modal-overlay">
-      <div className="modal-ficha">
-        <div className="modal-header">
-          <h3><i className="fas fa-address-card"></i> Ficha do Cliente</h3>
-          <button onClick={onClose} className="btn-fechar">
-            <i className="fas fa-times"></i>
-          </button>
-        </div>
-        
-        <div className="ficha-conteudo">
-          <div className="ficha-info">
-            <h4>{cliente.nome}</h4>
-            {cliente.telefone && <p><i className="fas fa-phone"></i> {cliente.telefone}</p>}
-            <p><i className="fas fa-calendar-alt"></i> Cadastrado em: {new Date(cliente.data_cadastro).toLocaleDateString('pt-BR')}</p>
-            
-            {cliente.observacoes && (
-              <p><i className="fas fa-sticky-note"></i> {cliente.observacoes}</p>
-            )}
-          </div>
-          
-          <div className="ficha-saldo">
-            <div className={`saldo-valor ${cliente.saldo_atual > 0 ? 'saldo-negativo' : 'saldo-positivo'}`}>
-              R$ {Math.abs(cliente.saldo_atual).toFixed(2)}
-            </div>
-            <div className="saldo-label">
-              {cliente.saldo_atual > 0 ? 'VALOR DEVIDO' : 'SEM DÍVIDAS'}
-            </div>
-            
-            <div className="ficha-limite">
-              <small>Limite de crédito: R$ {cliente.limite_credito.toFixed(2)}</small>
-            </div>
-          </div>
-          
-          {cliente.saldo_atual > 0 && (
-            <div className="ficha-acoes">
-              {!mostrarFormPagamento ? (
-                <button 
-                  onClick={() => setMostrarFormPagamento(true)}
-                  className="btn-pagar"
-                >
-                  <i className="fas fa-money-bill-wave"></i> Registrar Pagamento
-                </button>
-              ) : (
-                <div className="form-pagamento">
-                  <h5>Registrar Pagamento</h5>
-                  <div className="form-group">
-                    <label>Valor (R$)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={valorPagamento}
-                      onChange={(e) => setValorPagamento(e.target.value)}
-                      placeholder={`Máximo: ${cliente.saldo_atual.toFixed(2)}`}
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label>Forma de Pagamento</label>
-                    <select 
-                      value={formaPagamento}
-                      onChange={(e) => setFormaPagamento(e.target.value)}
-                    >
-                      <option value="dinheiro">Dinheiro</option>
-                      <option value="pix">PIX</option>
-                      <option value="cartao_debito">Cartão Débito</option>
-                    </select>
-                  </div>
-                  
-                  <div className="form-botoes">
-                    <button 
-                      onClick={() => setMostrarFormPagamento(false)}
-                      className="btn-cancelar"
-                    >
-                      Cancelar
-                    </button>
-                    <button onClick={handlePagar} className="btn-confirmar">
-                      <i className="fas fa-check"></i> Confirmar Pagamento
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          
-          <div className="ficha-historico">
-            <h5><i className="fas fa-history"></i> Histórico Recente</h5>
-            <p className="texto-suave">(Em desenvolvimento - em breve)</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ==========================================
-// COMPONENTE: Formulário de Novo Pedido
-// ==========================================
-const NovoPedidoForm = ({ onNovoPedido, clientesFieis }) => {
-  const [mostrarForm, setMostrarForm] = useState(false);
-  const [formData, setFormData] = useState({
-    cliente_nome: '',
-    cliente_telefone: '',
-    itens: [{ nome: 'Açaí 500ml', preco: 20.00 }],
-    valor_total: 20.00,
-    forma_pagamento: 'dinheiro',
-    cliente_fiel_id: '',
-    observacoes: '',
-    endereco_entrega: ''
-  });
-  const [mostrarClientes, setMostrarClientes] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Se selecionou um cliente fiel, preenche automaticamente
-    if (name === 'cliente_fiel_id' && value) {
-      const cliente = clientesFieis.find(c => c.id == value);
-      if (cliente) {
-        setFormData(prev => ({
-          ...prev,
-          cliente_nome: cliente.nome,
-          cliente_telefone: cliente.telefone || '',
-          forma_pagamento: 'a_prazo'
-        }));
-      }
-    }
-  };
-
-  const handleItemChange = (index, field, value) => {
-    const novosItens = [...formData.itens];
-    novosItens[index] = { ...novosItens[index], [field]: value };
-    
-    const novoTotal = novosItens.reduce((soma, item) => soma + parseFloat(item.preco || 0), 0);
-    
-    setFormData(prev => ({ 
-      ...prev, 
-      itens: novosItens,
-      valor_total: novoTotal
-    }));
-  };
-
-  const adicionarItem = () => {
-    setFormData(prev => ({
-      ...prev,
-      itens: [...prev.itens, { nome: '', preco: 0 }]
-    }));
-  };
-
-  const removerItem = (index) => {
-    if (formData.itens.length > 1) {
-      const novosItens = formData.itens.filter((_, i) => i !== index);
-      const novoTotal = novosItens.reduce((soma, item) => soma + parseFloat(item.preco || 0), 0);
-      
-      setFormData(prev => ({ 
-        ...prev, 
-        itens: novosItens,
-        valor_total: novoTotal
-      }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.cliente_nome.trim()) {
-      alert('Digite o nome do cliente');
-      return;
-    }
-    
-    // Validação para "A Prazo"
-    if (formData.forma_pagamento === 'a_prazo' && !formData.cliente_fiel_id) {
-      alert('Para pedidos "A Prazo", selecione um cliente fiel da lista');
-      return;
-    }
-
-    try {
-      await onNovoPedido(formData);
-      
-      // Reset do formulário
-      setFormData({
-        cliente_nome: '',
-        cliente_telefone: '',
-        itens: [{ nome: 'Açaí 500ml', preco: 20.00 }],
-        valor_total: 20.00,
-        forma_pagamento: 'dinheiro',
-        cliente_fiel_id: '',
-        observacoes: '',
-        endereco_entrega: ''
-      });
-      
-      setMostrarForm(false);
-      alert('✅ Pedido criado com sucesso!');
-    } catch (erro) {
-      console.error('Erro ao criar pedido:', erro);
-      alert('❌ Erro ao criar pedido. Verifique o console (F12) para detalhes.');
-    }
-  };
-
-  return (
-    <div className="novo-pedido-container">
-      <button 
-        onClick={() => setMostrarForm(true)}
-        className="btn-novo-pedido"
-      >
-        <i className="fas fa-plus"></i> NOVO PEDIDO
-      </button>
-      
-      {mostrarForm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h3><i className="fas fa-shopping-cart"></i> Novo Pedido</h3>
-              <button onClick={() => setMostrarForm(false)} className="btn-fechar">
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            
-            <form onSubmit={handleSubmit}>
-              {/* Seção Cliente Fiel */}
-              <div className="form-group">
-                <label>
-                  <i className="fas fa-star"></i> Cliente Fiel (opcional)
-                  <button 
-                    type="button"
-                    onClick={() => setMostrarClientes(!mostrarClientes)}
-                    className="btn-toggle-clientes"
-                  >
-                    {mostrarClientes ? 'Ocultar' : 'Mostrar'} lista
-                  </button>
-                </label>
-                
-                {mostrarClientes && clientesFieis.length > 0 ? (
-                  <select 
-                    name="cliente_fiel_id"
-                    value={formData.cliente_fiel_id}
-                    onChange={handleInputChange}
-                    className="select-clientes"
-                  >
-                    <option value="">-- Selecione um cliente fiel --</option>
-                    {clientesFieis.map(cliente => (
-                      <option key={cliente.id} value={cliente.id}>
-                        {cliente.nome} {cliente.telefone ? `(${cliente.telefone})` : ''} 
-                        {cliente.saldo_atual > 0 ? ` - Deve: R$ ${cliente.saldo_atual.toFixed(2)}` : ''}
-                      </option>
-                    ))}
-                  </select>
-                ) : mostrarClientes ? (
-                  <p className="texto-suave">Nenhum cliente fiel cadastrado ainda.</p>
-                ) : null}
-              </div>
-              
-              {/* Dados do Cliente */}
-              <div className="form-group">
-                <label><i className="fas fa-user"></i> Nome do Cliente *</label>
-                <input
-                  type="text"
-                  name="cliente_nome"
-                  value={formData.cliente_nome}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Ex: João Silva"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label><i className="fas fa-phone"></i> Telefone (WhatsApp)</label>
-                <input
-                  type="text"
-                  name="cliente_telefone"
-                  value={formData.cliente_telefone}
-                  onChange={handleInputChange}
-                  placeholder="(11) 99999-9999"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label><i className="fas fa-map-marker-alt"></i> Endereço (opcional)</label>
-                <input
-                  type="text"
-                  name="endereco_entrega"
-                  value={formData.endereco_entrega}
-                  onChange={handleInputChange}
-                  placeholder="Para entregas"
-                />
-              </div>
-              
-              {/* Itens do Pedido */}
-              <div className="form-group">
-                <label><i className="fas fa-utensils"></i> Itens do Pedido</label>
-                {formData.itens.map((item, index) => (
-                  <div key={index} className="item-row">
-                    <input
-                      type="text"
-                      value={item.nome}
-                      onChange={(e) => handleItemChange(index, 'nome', e.target.value)}
-                      placeholder="Nome do item"
-                      className="item-nome"
-                    />
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={item.preco}
-                      onChange={(e) => handleItemChange(index, 'preco', parseFloat(e.target.value))}
-                      placeholder="Preço"
-                      className="item-preco"
-                    />
-                    {formData.itens.length > 1 && (
-                      <button 
-                        type="button" 
-                        onClick={() => removerItem(index)}
-                        className="btn-remover-item"
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button type="button" onClick={adicionarItem} className="btn-add-item">
-                  <i className="fas fa-plus"></i> Adicionar Item
-                </button>
-              </div>
-              
-              {/* Forma de Pagamento */}
-              <div className="form-group">
-                <label><i className="fas fa-money-bill-wave"></i> Forma de Pagamento</label>
-                <select 
-                  name="forma_pagamento" 
-                  value={formData.forma_pagamento}
-                  onChange={handleInputChange}
-                >
-                  <option value="dinheiro">💵 Dinheiro (Recebido hoje)</option>
-                  <option value="pix">🏦 PIX (Recebido hoje)</option>
-                  <option value="cartao_debito">💳 Cartão Débito (1-2 dias)</option>
-                  <option value="cartao_credito">💳 Cartão Crédito (Recebe em 30 dias)</option>
-                  <option value="alelo_vr">🎫 Alelo/VR/VA (Recebe próximo mês)</option>
-                  <option value="a_prazo" disabled={!formData.cliente_fiel_id}>
-                    📝 A Prazo (Cliente Fiel) {!formData.cliente_fiel_id && '(Selecione cliente acima)'}
-                  </option>
-                </select>
-              </div>
-              
-              {/* Observações */}
-              <div className="form-group">
-                <label><i className="fas fa-sticky-note"></i> Observações</label>
-                <textarea
-                  name="observacoes"
-                  value={formData.observacoes}
-                  onChange={handleInputChange}
-                  placeholder="Ex: Sem granola, com banana extra, para viagem..."
-                  rows="3"
-                />
-              </div>
-              
-              {/* Total */}
-              <div className="form-total">
-                <strong>TOTAL: R$ {formData.valor_total.toFixed(2)}</strong>
-                {formData.forma_pagamento === 'a_prazo' && formData.cliente_fiel_id && (
-                  <div className="aviso-prazo">
-                    <i className="fas fa-exclamation-circle"></i> Este valor será adicionado à ficha do cliente.
-                  </div>
-                )}
-              </div>
-              
-              {/* Botões */}
-              <div className="form-botoes">
-                <button 
-                  type="button" 
-                  onClick={() => setMostrarForm(false)}
-                  className="btn-cancelar"
-                >
-                  Cancelar
-                </button>
-                <button type="submit" className="btn-salvar">
-                  <i className="fas fa-check"></i> Salvar Pedido
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ==========================================
-// COMPONENTE PRINCIPAL: App
+// COMPONENTE PRINCIPAL: App (SIMPLIFICADO)
 // ==========================================
 function App() {
   const [pedidos, setPedidos] = useState([]);
   const [clientesFieis, setClientesFieis] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [carregandoClientes, setCarregandoClientes] = useState(false);
-  const [clienteFicha, setClienteFicha] = useState(null);
-  const [mostrarModalFicha, setMostrarModalFicha] = useState(false);
 
   // ==========================================
   // FUNÇÃO: Carregar Pedidos
@@ -723,63 +305,6 @@ function App() {
   };
 
   // ==========================================
-  // FUNÇÃO: Criar Novo Pedido
-  // ==========================================
-  const criarNovoPedido = async (dadosPedido) => {
-    try {
-      console.log('📤 Enviando novo pedido:', dadosPedido);
-      const response = await axios.post(`${API_URL}/pedidos/novo`, dadosPedido);
-      
-      // Recarrega tudo
-      carregarPedidos();
-      carregarClientesFieis();
-      
-      return response.data;
-    } catch (erro) {
-      console.error('❌ Erro ao criar pedido:', erro.response?.data || erro.message);
-      throw erro;
-    }
-  };
-
-  // ==========================================
-  // FUNÇÃO: Ver Ficha do Cliente
-  // ==========================================
-  const verFichaCliente = async (clienteId) => {
-    try {
-      const response = await axios.get(`${API_URL}/clientes-fieis/${clienteId}`);
-      setClienteFicha(response.data);
-      setMostrarModalFicha(true);
-    } catch (erro) {
-      console.error('Erro ao carregar ficha:', erro);
-      alert('Não foi possível carregar a ficha do cliente.');
-    }
-  };
-
-  // ==========================================
-  // FUNÇÃO: Registrar Pagamento
-  // ==========================================
-  const registrarPagamento = async (clienteId, valor, formaPagamento) => {
-    try {
-      await axios.post(`${API_URL}/clientes-fieis/${clienteId}/pagar`, {
-        valor: valor,
-        forma_pagamento: formaPagamento
-      });
-      
-      alert(`✅ Pagamento de R$ ${valor.toFixed(2)} registrado com sucesso!`);
-      
-      // Atualiza as listas
-      carregarClientesFieis();
-      if (clienteFicha?.id === clienteId) {
-        verFichaCliente(clienteId); // Recarrega a ficha atual
-      }
-      
-    } catch (erro) {
-      console.error('Erro ao registrar pagamento:', erro);
-      alert('❌ Erro ao registrar pagamento');
-    }
-  };
-
-  // ==========================================
   // EFEITOS (useEffect)
   // ==========================================
   useEffect(() => {
@@ -826,7 +351,7 @@ function App() {
     .reduce((soma, p) => soma + parseFloat(p.valor_total || 0), 0);
 
   // ==========================================
-  // RENDERIZAÇÃO PRINCIPAL
+  // RENDERIZAÇÃO PRINCIPAL (SIMPLIFICADA)
   // ==========================================
   return (
     <div className="App">
@@ -854,42 +379,34 @@ function App() {
             <div className="stat-value">{clientesFieis.length}</div>
             <div className="stat-label">Clientes Fiéis</div>
           </div>
-          <div className="header-actions">
-  <button 
-    onClick={() => setMostrarModalClientes(true)}
-    className="btn-gerenciar-clientes"
-  >
-    <i className="fas fa-users"></i> Gerenciar Clientes
-  </button>
-</div>
         </div>
-      <div className="header-actions">
-  <button 
-    onClick={() => setMostrarGerenciarClientes(true)}
-    className="btn-gerenciar-clientes"
-  >
-    <i className="fas fa-users"></i> Gerenciar Clientes
-  </button>
-</div>
+        
+        {/* Botão para cadastrar clientes (SIMPLE) */}
+        <div style={{ marginTop: '20px' }}>
+          <button 
+            onClick={() => alert('Funcionalidade em desenvolvimento')}
+            className="btn-gerenciar-clientes"
+          >
+            <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
+          </button>
+        </div>
       </header>
 
       <main className="app-main">
-        {/* Botão Novo Pedido */}
-        <NovoPedidoForm
-      <div className="botoes-principais">
-        <NovoPedidoForm 
-        onNovoPedido={criarNovoPedido} 
-        clientesFieis={clientesFieis}
-  />
-  
-  <GerenciarClientesFieis 
-    clientesFieis={clientesFieis}
-    onAtualizarLista={carregarClientesFieis}
-  />
-</div>
-          onNovoPedido={criarNovoPedido} 
-          clientesFieis={clientesFieis}
-        />
+        {/* Aviso sobre clientes */}
+        <div style={{
+          background: '#fff3cd',
+          border: '1px solid #ffeaa7',
+          padding: '15px',
+          borderRadius: '10px',
+          marginBottom: '20px',
+          textAlign: 'center'
+        }}>
+          <p>
+            <i className="fas fa-info-circle"></i> 
+            <strong> Para cadastrar clientes fiéis:</strong> Acesse o painel administrativo ou entre em contato com o suporte.
+          </p>
+        </div>
 
         {/* Seção de Abas */}
         <section className="abas-section">
@@ -904,7 +421,7 @@ function App() {
                 status="novo" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={verFichaCliente}
+                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
                 icone="fas fa-bell"
                 cor="#FF6B6B"
               />
@@ -914,7 +431,7 @@ function App() {
                 status="producao" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={verFichaCliente}
+                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
                 icone="fas fa-blender"
                 cor="#FFD166"
               />
@@ -924,7 +441,7 @@ function App() {
                 status="pronto" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={verFichaCliente}
+                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
                 icone="fas fa-check-circle"
                 cor="#06D6A0"
               />
@@ -934,7 +451,7 @@ function App() {
                 status="entregue" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={verFichaCliente}
+                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
                 icone="fas fa-truck"
                 cor="#118AB2"
               />
@@ -973,66 +490,14 @@ function App() {
             </div>
           </div>
         </section>
-
-        {/* Lista de Clientes Fiéis (resumo) */}
-        {clientesFieis.length > 0 && (
-          <section className="clientes-section">
-            <h3><i className="fas fa-users"></i> Clientes Fiéis</h3>
-            <div className="clientes-grid">
-              {clientesFieis.slice(0, 5).map(cliente => (
-                <div key={cliente.id} className="cliente-card">
-                  <div className="cliente-nome">{cliente.nome}</div>
-                  <div className={`cliente-saldo ${cliente.saldo_atual > 0 ? 'negativo' : 'positivo'}`}>
-                    R$ {Math.abs(cliente.saldo_atual).toFixed(2)}
-                  </div>
-                  <button 
-                    onClick={() => verFichaCliente(cliente.id)}
-                    className="btn-ver-ficha"
-                  >
-                    Ver Ficha
-                  </button>
-                </div>
-              ))}
-              
-              {clientesFieis.length > 5 && (
-                <div className="cliente-card mais-clientes">
-                  <div className="cliente-nome">+ {clientesFieis.length - 5} outros</div>
-                  <div className="cliente-desc">Clientes cadastrados</div>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
       </main>
-
-      {/* Modal da Ficha do Cliente */}
-      {mostrarModalFicha && clienteFicha && (
-        <ModalFichaCliente 
-          cliente={clienteFicha}
-          onClose={() => setMostrarModalFicha(false)}
-          onPagar={registrarPagamento}
-        />
-      )}
 
       {/* Rodapé */}
       <footer className="app-footer">
         <p>Sistema Dellas Açaí | Backend: Render | Frontend: Vercel | {new Date().getFullYear()}</p>
-
-        {mostrarGerenciarClientes && (
-  <GerenciarClientes 
-    onClose={() => setMostrarGerenciarClientes(false)}
-    onClienteSelecionado={(cliente) => {
-      // Preenche automaticamente no formulário de pedido
-      setFormData?.({
-        ...formData,
-        cliente_fiel_id: cliente.id,
-        cliente_nome: cliente.nome,
-        cliente_telefone: cliente.telefone,
-        forma_pagamento: 'a_prazo'
-      });
-    }}
-  />
-)}
+        <p style={{ fontSize: '0.8em', marginTop: '10px' }}>
+          <i className="fas fa-tools"></i> Cadastro de clientes fiéis em breve
+        </p>
       </footer>
     </div>
   );
