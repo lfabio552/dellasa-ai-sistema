@@ -53,24 +53,15 @@ const clientesFieisRoutes = require('./src/routes/ClientesFieis.js');
 app.use('/api/clientes-fieis', clientesFieisRoutes);
 
 // ==========================================
-// ROTAS PARA CLIENTES FIÉIS (alias para facilitar)
+// ROTAS DE CLIENTES FIÉIS
 // ==========================================
-// Estas rotas são apenas alias para facilitar o frontend
-app.get('/api/clientes-fieis', (req, res) => {
-    // Redireciona para a rota correta
-    res.redirect(307, '/api/pedidos/clientes-fieis/todos');
-});
-
-app.get('/api/clientes-fieis/:id', (req, res) => {
-    const { id } = req.params;
-    res.redirect(307, `/api/pedidos/clientes-fieis/${id}`);
-});
-
-app.post('/api/clientes-fieis/:id/pagar', (req, res) => {
-    const { id } = req.params;
-    res.redirect(307, `/api/pedidos/clientes-fieis/${id}/pagar`);
-});
-
+try {
+    const clientesFieisRoutes = require('./src/routes/ClientesFieis.js');
+    app.use('/api/clientes-fieis', clientesFieisRoutes);
+    console.log('✅ Rotas de Clientes Fiéis carregadas');
+} catch (err) {
+    console.error('❌ Erro ao carregar rotas de clientes:', err);
+}
 // ==========================================
 // ROTA DE SAÚDE/STATUS
 // ==========================================
