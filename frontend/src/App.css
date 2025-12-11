@@ -1,4 +1,6 @@
-/* Reset e configurações gerais */
+/* ==========================================
+   RESET E CONFIGURAÇÕES GERAIS
+   ========================================== */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +14,9 @@ body {
   color: #333;
 }
 
-/* Header */
+/* ==========================================
+   HEADER
+   ========================================== */
 .app-header {
   background: linear-gradient(135deg, #8A2BE2, #4B0082);
   color: white;
@@ -66,45 +70,41 @@ body {
   opacity: 0.9;
 }
 
-/* Main content */
+/* ==========================================
+   BOTÃO CADASTRAR CLIENTE
+   ========================================== */
+.btn-gerenciar-clientes {
+  background: linear-gradient(135deg, #06D6A0, #118AB2);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  margin-top: 15px;
+}
+
+.btn-gerenciar-clientes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
+}
+
+/* ==========================================
+   CONTEÚDO PRINCIPAL
+   ========================================== */
 .app-main {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
 
-/* Botão Novo Pedido */
-.novo-pedido-container {
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.btn-novo-pedido {
-  background: linear-gradient(135deg, #8A2BE2, #4B0082);
-  color: white;
-  border: none;
-  padding: 18px 35px;
-  font-size: 1.2em;
-  font-weight: bold;
-  border-radius: 50px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.3);
-  transition: all 0.3s ease;
-}
-
-.btn-novo-pedido:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
-}
-
-.btn-novo-pedido:active {
-  transform: translateY(-1px);
-}
-
-/* Modal do formulário */
+/* ==========================================
+   MODAL
+   ========================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -176,7 +176,9 @@ body {
   background: #f5f5f5;
 }
 
-/* Formulário */
+/* ==========================================
+   FORMULÁRIOS
+   ========================================== */
 .modal form {
   padding: 30px;
 }
@@ -214,76 +216,42 @@ body {
   border-color: #8A2BE2;
 }
 
-.item-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-  align-items: center;
-}
-
-.item-nome {
-  flex: 3;
-}
-
-.item-preco {
-  flex: 1;
-}
-
-.btn-remover-item {
-  background: #ff6b6b;
-  color: white;
-  border: none;
+/* ==========================================
+   MENSAGENS DE ERRO/SUCESSO
+   ========================================== */
+.mensagem-erro {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px 15px;
   border-radius: 8px;
-  padding: 12px;
-  cursor: pointer;
+  margin-bottom: 20px;
+  border-left: 4px solid #dc3545;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: background 0.3s;
-  min-width: 45px;
+  gap: 10px;
 }
 
-.btn-remover-item:hover {
-  background: #ff5252;
-}
-
-.btn-add-item {
-  background: #4CAF50;
-  color: white;
-  border: none;
-  padding: 12px 20px;
+.mensagem-sucesso {
+  background: #d4edda;
+  color: #155724;
+  padding: 12px 15px;
   border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
+  margin-bottom: 20px;
+  border-left: 4px solid #28a745;
+  display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.95em;
-  transition: background 0.3s;
-  margin-top: 10px;
 }
 
-.btn-add-item:hover {
-  background: #45a049;
-}
-
-.form-total {
-  text-align: right;
-  font-size: 1.4em;
-  color: #333;
-  margin: 25px 0;
-  padding: 18px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  border: 2px solid #e9ecef;
-}
-
-.form-botoes {
+/* ==========================================
+   RODAPÉ DO MODAL
+   ========================================== */
+.modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  margin-top: 25px;
-  padding-top: 25px;
-  border-top: 2px solid #f0f0f0;
+  gap: 10px;
+  padding: 20px;
+  border-top: 1px solid #eee;
 }
 
 .btn-cancelar {
@@ -321,7 +289,9 @@ body {
   box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
 }
 
-/* Seção de Abas */
+/* ==========================================
+   ABAS DE PEDIDOS
+   ========================================== */
 .abas-section {
   margin: 40px 0;
 }
@@ -339,7 +309,9 @@ body {
   }
 }
 
-/* Cada Aba */
+/* ==========================================
+   CADA ABA
+   ========================================== */
 .aba {
   background: white;
   border-radius: 15px;
@@ -407,7 +379,9 @@ body {
   font-size: 1.1em;
 }
 
-/* Card de Pedido */
+/* ==========================================
+   CARD DE PEDIDO
+   ========================================== */
 .pedido-card {
   background: white;
   border-radius: 12px;
@@ -592,17 +566,9 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-cancelar {
-  background: #ff6b6b;
-  color: white;
-}
-
-.btn-cancelar:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
-/* Seção de Resumo */
+/* ==========================================
+   RESUMO FINANCEIRO
+   ========================================== */
 .resumo-section {
   margin-top: 40px;
 }
@@ -650,7 +616,9 @@ body {
   color: #8A2BE2;
 }
 
-/* Estado de Carregamento */
+/* ==========================================
+   ESTADO DE CARREGAMENTO
+   ========================================== */
 .carregando {
   text-align: center;
   padding: 60px;
@@ -667,7 +635,9 @@ body {
   color: #8A2BE2;
 }
 
-/* Footer */
+/* ==========================================
+   FOOTER
+   ========================================== */
 .app-footer {
   text-align: center;
   padding: 25px;
@@ -678,7 +648,9 @@ body {
   background: white;
 }
 
-/* Responsividade */
+/* ==========================================
+   RESPONSIVIDADE
+   ========================================== */
 @media (max-width: 768px) {
   .abas-container {
     grid-template-columns: 1fr;
@@ -697,16 +669,6 @@ body {
     margin: 10px;
   }
   
-  .item-row {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .item-nome,
-  .item-preco {
-    width: 100%;
-  }
-  
   .pedido-acoes button {
     min-width: 100%;
   }
@@ -714,6 +676,15 @@ body {
   .pedido-footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .btn-cancelar,
+  .btn-salvar {
+    width: 100%;
   }
 }
 
@@ -725,632 +696,4 @@ body {
   .resumo-grid {
     grid-template-columns: 1fr;
   }
-  
-  .form-botoes {
-    flex-direction: column;
-  }
-  
-  .btn-cancelar,
-  .btn-salvar {
-    width: 100%;
-  }
-}/* ==========================================
-   ESTILOS PARA GERENCIAR CLIENTES FIÉIS
-   ========================================== */
-
-.botoes-principais {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
-
-.btn-gerenciar-clientes {
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: white;
-  border: none;
-  padding: 18px 35px;
-  font-size: 1.2em;
-  font-weight: bold;
-  border-radius: 50px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
-  transition: all 0.3s ease;
-}
-
-.btn-gerenciar-clientes:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
-}
-
-.modal-grande {
-  background: white;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 900px;
-  max-height: 85vh;
-  overflow-y: auto;
-  animation: slideUp 0.3s ease;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-}
-
-.lista-clientes-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
-}
-
-.btn-novo-cliente {
-  background: #2ecc71;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.btn-novo-cliente:hover {
-  background: #27ae60;
-}
-
-.total-clientes {
-  color: #666;
-  font-weight: bold;
-  background: #f8f9fa;
-  padding: 8px 15px;
-  border-radius: 20px;
-}
-
-.sem-clientes {
-  text-align: center;
-  padding: 60px 20px;
-  color: #999;
-}
-
-.sem-clientes i {
-  font-size: 4em;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.btn-cadastrar-primeiro {
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1em;
-  margin-top: 20px;
-  transition: background 0.3s;
-}
-
-.btn-cadastrar-primeiro:hover {
-  background: #2980b9;
-}
-
-/* Tabela de clientes */
-.tabela-clientes {
-  overflow-x: auto;
-  margin-bottom: 20px;
-}
-
-.tabela-clientes table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.tabela-clientes th {
-  background: #f8f9fa;
-  padding: 15px;
-  text-align: left;
-  font-weight: bold;
-  color: #333;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.tabela-clientes td {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-}
-
-.tabela-clientes tr:hover {
-  background: #f8f9fa;
-}
-
-.cliente-com-saldo {
-  background: #fff5f5 !important;
-}
-
-.cliente-nome {
-  font-weight: 500;
-  color: #333;
-}
-
-.cliente-saldo {
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-.cliente-saldo.negativo {
-  color: #e74c3c;
-}
-
-.cliente-saldo.positivo {
-  color: #27ae60;
-}
-
-.badge-devendo {
-  background: #e74c3c;
-  color: white;
-  font-size: 0.7em;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-
-.cliente-limite {
-  color: #7f8c8d;
-}
-
-.cliente-acoes {
-  display: flex;
-  gap: 8px;
-}
-
-.cliente-acoes button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-editar {
-  background: #3498db;
-  color: white;
-}
-
-.btn-editar:hover {
-  background: #2980b9;
-}
-
-.btn-pagar {
-  background: #2ecc71;
-  color: white;
-}
-
-.btn-pagar:hover {
-  background: #27ae60;
-}
-
-.btn-pagar:disabled {
-  background: #bdc3c7;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.btn-deletar {
-  background: #e74c3c;
-  color: white;
-}
-
-.btn-deletar:hover {
-  background: #c0392b;
-}
-
-/* Formulário de cliente */
-.form-cliente-fiel {
-  padding: 20px 0;
-}
-
-.texto-ajuda {
-  display: block;
-  margin-top: 5px;
-  color: #7f8c8d;
-  font-size: 0.9em;
-}
-
-/* Legenda */
-.legenda {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-
-.legenda-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-}
-
-.cor-devendo {
-  width: 15px;
-  height: 15px;
-  background: #fff5f5;
-  border: 2px solid #e74c3c;
-  border-radius: 3px;
-}
-
-.cor-pago {
-  width: 15px;
-  height: 15px;
-  background: #f8f9fa;
-  border: 2px solid #27ae60;
-  border-radius: 3px;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .botoes-principais {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn-novo-pedido,
-  .btn-gerenciar-clientes {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .tabela-clientes {
-    font-size: 0.9em;
-  }
-  
-  .cliente-acoes {
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .cliente-acoes button {
-    width: 100%;
-
-    /* Botão Gerenciar Clientes */
-.btn-gerenciar-clientes {
-  background: linear-gradient(135deg, #06D6A0, #118AB2);
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  transition: all 0.3s;
-}
-
-.btn-gerenciar-clientes:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
-}
-
-/* Modal Grande */
-.modal-grande {
-  max-width: 900px;
-  max-height: 80vh;
-}
-
-.modal-conteudo {
-  padding: 25px;
-}
-
-/* Ações do Modal */
-.modal-acoes {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.btn-novo-cliente {
-  background: linear-gradient(135deg, #8A2BE2, #4B0082);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-atualizar {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Tabela de Clientes */
-.tabela-clientes {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-
-.tabela-clientes th {
-  background: #f8f9fa;
-  padding: 15px;
-  text-align: left;
-  border-bottom: 2px solid #dee2e6;
-  color: #495057;
-}
-
-.tabela-clientes td {
-  padding: 15px;
-  border-bottom: 1px solid #dee2e6;
-  vertical-align: top;
-}
-
-.saldo-negativo {
-  color: #dc3545;
-  font-weight: bold;
-}
-
-.saldo-positivo {
-  color: #28a745;
-  font-weight: bold;
-}
-
-/* Ações na Tabela */
-.acoes-cliente {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-selecionar {
-  background: #28a745;
-  color: white;
-  border: none;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-excluir {
-  background: #dc3545;
-  color: white;
-  border: none;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-excluir:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
-}
-
-.aviso-saldo {
-  color: #ffc107;
-  font-size: 1.2em;
-}
-
-/* Cliente sem registros */
-.sem-clientes {
-  text-align: center;
-  padding: 60px 20px;
-  color: #6c757d;
-}
-
-.sem-clientes i {
-  font-size: 4em;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.btn-principal {
-  background: linear-gradient(135deg, #8A2BE2, #4B0082);
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.1em;
-  margin-top: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Resumo */
-.resumo-clientes {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 10px;
-}
-
-.resumo-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.resumo-label {
-  font-size: 0.9em;
-  color: #6c757d;
-  margin-bottom: 5px;
-}
-
-.resumo-valor {
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
-/* Cliente observações */
-.cliente-obs {
-  font-size: 0.85em;
-  color: #6c757d;
-  margin-top: 5px;
-  font-style: italic;
-}
-
-/* Mensagem de erro */
-.mensagem-erro {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 12px 20px;
-  border-radius: 8px;
-  margin: 15px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Texto suave */
-.texto-suave {
-  color: #6c757d;
-  font-size: 0.85em;
-  margin-top: 5px;
-}
-  }
-}
-
-/* ==========================================
-   ESTILOS PARA GERENCIAMENTO DE CLIENTES
-   ========================================== */
-
-/* Botão no header */
-.btn-gerenciar-clientes {
-  background: linear-gradient(135deg, #06D6A0, #118AB2);
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-  transition: all 0.3s;
-}
-
-.btn-gerenciar-clientes:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
-}
-
-/* Modal grande */
-.modal-grande {
-  max-width: 900px;
-  max-height: 80vh;
-}
-
-/* Botões básicos */
-.btn-novo-cliente {
-  background: linear-gradient(135deg, #8A2BE2, #4B0082);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-right: 10px;
-}
-
-.btn-atualizar {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Tabela simples */
-.tabela-clientes {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 20px 0;
-}
-
-.tabela-clientes th {
-  background: #f8f9fa;
-  padding: 12px;
-  text-align: left;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.tabela-clientes td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-}
-
-.saldo-negativo { color: #dc3545; font-weight: bold; }
-.saldo-positivo { color: #28a745; font-weight: bold; }
-
-/* Botões de ação */
-.btn-selecionar {
-  background: #28a745;
-  color: white;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.btn-excluir {
-  background: #dc3545;
-  color: white;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-/* Estados vazios */
-.sem-clientes {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-}
-
-.sem-clientes i {
-  font-size: 3em;
-  opacity: 0.3;
-  margin-bottom: 15px;
 }
