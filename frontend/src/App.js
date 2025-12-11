@@ -455,3 +455,75 @@ function App() {
                 titulo="Prontos" 
                 status="pronto" 
                 pedidos={pedidos}
+                onStatusChange={mudarStatusPedido}
+                onVerFicha={verFichaCliente}
+                icone="fas fa-check-circle"
+                cor="#06D6A0"
+              />
+              
+              <Aba 
+                titulo="Entregues" 
+                status="entregue" 
+                pedidos={pedidos}
+                onStatusChange={mudarStatusPedido}
+                onVerFicha={verFichaCliente}
+                icone="fas fa-truck"
+                cor="#118AB2"
+              />
+            </div>
+          )}
+        </section>
+
+        {/* Resumo Financeiro */}
+        <section className="resumo-section">
+          <h3><i className="fas fa-chart-pie"></i> Resumo Financeiro do Dia</h3>
+          <div className="resumo-grid">
+            <div className="resumo-card">
+              <div className="resumo-titulo">💵 Caixa Hoje</div>
+              <div className="resumo-valor">R$ {caixaHoje.toFixed(2)}</div>
+              <div className="resumo-desc">(Dinheiro, PIX, Débito)</div>
+            </div>
+            
+            <div className="resumo-card">
+              <div className="resumo-titulo">📅 A Receber (30 dias)</div>
+              <div className="resumo-valor">R$ {aReceber30Dias.toFixed(2)}</div>
+              <div className="resumo-desc">(Cartão Crédito, Alelo)</div>
+            </div>
+            
+            <div className="resumo-card">
+              <div className="resumo-titulo">📝 A Prazo</div>
+              <div className="resumo-valor">R$ {aPrazoHoje.toFixed(2)}</div>
+              <div className="resumo-desc">(Clientes Fiéis)</div>
+            </div>
+            
+            <div className="resumo-card">
+              <div className="resumo-titulo">👥 Total Devido</div>
+              <div className="resumo-valor">
+                R$ {clientesFieis.reduce((soma, c) => soma + (c.saldo_atual > 0 ? c.saldo_atual : 0), 0).toFixed(2)}
+              </div>
+              <div className="resumo-desc">Por todos clientes</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Modal de Cadastro de Cliente */}
+      {mostrarModalCliente && (
+        <ModalCliente 
+          onClose={() => setMostrarModalCliente(false)}
+          onClienteCadastrado={() => {
+            // Recarrega a lista de clientes
+            carregarClientesFieis();
+          }}
+        />
+      )}
+
+      {/* Rodapé */}
+      <footer className="app-footer">
+        <p>Sistema Dellas Açaí | Backend: Render | Frontend: Vercel | {new Date().getFullYear()}</p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
