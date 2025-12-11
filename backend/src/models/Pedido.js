@@ -1,4 +1,4 @@
-const sqlite3 = require('sqlite3').verbose();
+const db = require('../config/database.js');
 const path = require('path');
 
 // ==========================================
