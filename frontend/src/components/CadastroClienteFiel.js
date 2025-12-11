@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Clientes.css';
 
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
 
