@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.css';
 import ModalCliente from './components/ModalCliente';
+import './App.css';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
 const API_URL = 'https://dellasa-ai-sistema.onrender.com/api';
@@ -97,6 +97,14 @@ const PedidoCard = ({ pedido, onStatusChange, onVerFicha }) => {
           <button 
             onClick={() => onVerFicha(pedido.cliente_fiel_id)}
             className="btn-ficha"
+            style={{
+              background: '#4B0082',
+              color: 'white',
+              border: 'none',
+              padding: '5px 10px',
+              borderRadius: '5px',
+              fontSize: '0.8em'
+            }}
           >
             <i className="fas fa-address-card"></i> Ver Ficha
           </button>
@@ -209,7 +217,7 @@ const Aba = ({ titulo, status, pedidos, onStatusChange, onVerFicha, icone, cor }
 };
 
 // ==========================================
-// COMPONENTE PRINCIPAL: App (SIMPLIFICADO)
+// COMPONENTE PRINCIPAL: App
 // ==========================================
 function App() {
   const [pedidos, setPedidos] = useState([]);
@@ -217,7 +225,6 @@ function App() {
   const [carregando, setCarregando] = useState(true);
   const [carregandoClientes, setCarregandoClientes] = useState(false);
   const [mostrarModalCliente, setMostrarModalCliente] = useState(false);
-  const [clientesCadastrados, setClientesCadastrados] = useState([]);
 
   // ==========================================
   // FUNÇÃO: Carregar Pedidos
@@ -225,16 +232,13 @@ function App() {
   const carregarPedidos = async () => {
     try {
       setCarregando(true);
-      console.log('🔍 Buscando pedidos da API:', `${API_URL}/pedidos`);
-      
       const response = await axios.get(`${API_URL}/pedidos`);
-      console.log('✅ Resposta da API recebida:', response.data);
       
       // Proteção: Garante que os dados sejam um ARRAY
       let dadosRecebidos = response.data;
       
       if (!Array.isArray(dadosRecebidos)) {
-        console.error('⚠️ ERRO: API não retornou um array. Dados recebidos:', dadosRecebidos);
+        console.error('⚠️ ERRO: API não retornou um array.');
         dadosRecebidos = [];
       }
       
@@ -250,22 +254,18 @@ function App() {
             pedidoProcessado.itens = [];
           }
         } catch (erroParse) {
-          console.warn(`⚠️ Erro ao processar itens do pedido ${pedidoProcessado.id}:`, erroParse);
+          console.warn(`⚠️ Erro ao processar itens do pedido:`, erroParse);
           pedidoProcessado.itens = [];
         }
         
         return pedidoProcessado;
       });
       
-      console.log(`📦 ${pedidosProcessados.length} pedidos processados com sucesso`);
       setPedidos(pedidosProcessados);
       
     } catch (erro) {
       console.error('❌ Erro ao carregar pedidos:', erro);
-      console.error('Detalhes do erro:', erro.response?.data || erro.message);
-      
       setPedidos([]);
-      alert('Não foi possível carregar os pedidos. O sistema continuará funcionando.');
     } finally {
       setCarregando(false);
     }
@@ -281,7 +281,6 @@ function App() {
       
       if (Array.isArray(response.data)) {
         setClientesFieis(response.data);
-        console.log(`👥 ${response.data.length} clientes fiéis carregados`);
       } else {
         setClientesFieis([]);
       }
@@ -304,6 +303,18 @@ function App() {
     } catch (erro) {
       console.error('Erro ao mudar status:', erro);
       alert('❌ Erro ao atualizar pedido');
+    }
+  };
+
+  // ==========================================
+  // FUNÇÃO: Ver Ficha do Cliente
+  // ==========================================
+  const verFichaCliente = async (clienteId) => {
+    try {
+      alert(`Ficha do cliente ${clienteId} (funcionalidade em desenvolvimento)`);
+      // Implementação futura
+    } catch (erro) {
+      console.error('Erro ao carregar ficha:', erro);
     }
   };
 
@@ -354,7 +365,7 @@ function App() {
     .reduce((soma, p) => soma + parseFloat(p.valor_total || 0), 0);
 
   // ==========================================
-  // RENDERIZAÇÃO PRINCIPAL (SIMPLIFICADA)
+  // RENDERIZAÇÃO PRINCIPAL
   // ==========================================
   return (
     <div className="App">
@@ -384,32 +395,33 @@ function App() {
           </div>
         </div>
         
-        {/* Botão para cadastrar clientes (SIMPLE) */}
+        {/* Botão para cadastrar clientes */}
         <div style={{ marginTop: '20px' }}>
           <button 
-        onClick={() => setMostrarModalCliente(true)}
-          className="btn-gerenciar-clientes"
-            >
-      <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
+            onClick={() => setMostrarModalCliente(true)}
+            className="btn-gerenciar-clientes"
+          >
+            <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
           </button>
         </div>
       </header>
 
       <main className="app-main">
-        {/* Aviso sobre clientes */}
-        <div style={{
-          background: '#fff3cd',
-          border: '1px solid #ffeaa7',
-          padding: '15px',
-          borderRadius: '10px',
-          marginBottom: '20px',
-          textAlign: 'center'
-        }}>
-          <p>
-            <i className="fas fa-info-circle"></i> 
-            <strong> Para cadastrar clientes fiéis:</strong> Acesse o painel administrativo ou entre em contato com o suporte.
-          </p>
-        </div>
+        {/* Aviso sobre clientes cadastrados */}
+        {clientesFieis.length > 0 && (
+          <div style={{
+            background: '#e7f5ff',
+            padding: '15px',
+            borderRadius: '10px',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            <p>
+              <i className="fas fa-users"></i> 
+              <strong> {clientesFieis.length} cliente(s) fiel(is) cadastrado(s)</strong>
+            </p>
+          </div>
+        )}
 
         {/* Seção de Abas */}
         <section className="abas-section">
@@ -424,7 +436,7 @@ function App() {
                 status="novo" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
+                onVerFicha={verFichaCliente}
                 icone="fas fa-bell"
                 cor="#FF6B6B"
               />
@@ -434,7 +446,7 @@ function App() {
                 status="producao" 
                 pedidos={pedidos}
                 onStatusChange={mudarStatusPedido}
-                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
+                onVerFicha={verFichaCliente}
                 icone="fas fa-blender"
                 cor="#FFD166"
               />
@@ -443,80 +455,3 @@ function App() {
                 titulo="Prontos" 
                 status="pronto" 
                 pedidos={pedidos}
-                onStatusChange={mudarStatusPedido}
-                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
-                icone="fas fa-check-circle"
-                cor="#06D6A0"
-              />
-              
-              <Aba 
-                titulo="Entregues" 
-                status="entregue" 
-                pedidos={pedidos}
-                onStatusChange={mudarStatusPedido}
-                onVerFicha={(id) => alert(`Ver ficha do cliente ${id} (em desenvolvimento)`)}
-                icone="fas fa-truck"
-                cor="#118AB2"
-              />
-            </div>
-          )}
-        </section>
-
-        {/* Resumo Financeiro */}
-        <section className="resumo-section">
-          <h3><i className="fas fa-chart-pie"></i> Resumo Financeiro do Dia</h3>
-          <div className="resumo-grid">
-            <div className="resumo-card">
-              <div className="resumo-titulo">💵 Caixa Hoje</div>
-              <div className="resumo-valor">R$ {caixaHoje.toFixed(2)}</div>
-              <div className="resumo-desc">(Dinheiro, PIX, Débito)</div>
-            </div>
-            
-            <div className="resumo-card">
-              <div className="resumo-titulo">📅 A Receber (30 dias)</div>
-              <div className="resumo-valor">R$ {aReceber30Dias.toFixed(2)}</div>
-              <div className="resumo-desc">(Cartão Crédito, Alelo)</div>
-            </div>
-            
-            <div className="resumo-card">
-              <div className="resumo-titulo">📝 A Prazo</div>
-              <div className="resumo-valor">R$ {aPrazoHoje.toFixed(2)}</div>
-              <div className="resumo-desc">(Clientes Fiéis)</div>
-            </div>
-            
-            <div className="resumo-card">
-              <div className="resumo-titulo">👥 Total Devido</div>
-              <div className="resumo-valor">
-                R$ {clientesFieis.reduce((soma, c) => soma + (c.saldo_atual > 0 ? c.saldo_atual : 0), 0).toFixed(2)}
-              </div>
-              <div className="resumo-desc">Por todos clientes</div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Rodapé */}
-      <footer className="app-footer">
-        <p>Sistema Dellas Açaí | Backend: Render | Frontend: Vercel | {new Date().getFullYear()}</p>
-        <p style={{ fontSize: '0.8em', marginTop: '10px' }}>
-          <i className="fas fa-tools"></i> Cadastro de clientes fiéis em breve
-        </p>
-
-        {mostrarModalCliente && (
-  <ModalCliente 
-    onClose={() => setMostrarModalCliente(false)}
-    onClienteCadastrado={(novoCliente) => {
-      // Atualiza a lista de clientes
-      setClientesCadastrados(prev => [...prev, novoCliente]);
-      // Recarrega a lista de clientes do backend
-      carregarClientesFieis();
-    }}
-  />
-)}
-  
-      </footer>
-    </div>
-  );
-}
-
-export default App;
