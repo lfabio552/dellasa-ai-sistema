@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ModalCliente from './components/ModalCliente';
+import NovoPedidoForm from './components/NovoPedidoForm';
 import './App.css';
 
 // URL da API - ATUALIZE COM SEU BACKEND DO RENDER
@@ -103,7 +104,11 @@ const PedidoCard = ({ pedido, onStatusChange, onVerFicha }) => {
               border: 'none',
               padding: '5px 10px',
               borderRadius: '5px',
-              fontSize: '0.8em'
+              fontSize: '0.8em',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px'
             }}
           >
             <i className="fas fa-address-card"></i> Ver Ficha
@@ -225,6 +230,7 @@ function App() {
   const [carregando, setCarregando] = useState(true);
   const [carregandoClientes, setCarregandoClientes] = useState(false);
   const [mostrarModalCliente, setMostrarModalCliente] = useState(false);
+  const [mostrarListaClientes, setMostrarListaClientes] = useState(false);
 
   // ==========================================
   // FUNÇÃO: Carregar Pedidos
@@ -303,6 +309,24 @@ function App() {
     } catch (erro) {
       console.error('Erro ao mudar status:', erro);
       alert('❌ Erro ao atualizar pedido');
+    }
+  };
+
+  // ==========================================
+  // FUNÇÃO: Criar Novo Pedido
+  // ==========================================
+  const criarNovoPedido = async (dadosPedido) => {
+    try {
+      console.log('📤 Enviando novo pedido:', dadosPedido);
+      const response = await axios.post(`${API_URL}/pedidos/novo`, dadosPedido);
+      
+      // Recarrega os pedidos
+      carregarPedidos();
+      
+      return response.data;
+    } catch (erro) {
+      console.error('❌ Erro ao criar pedido:', erro);
+      throw erro;
     }
   };
 
@@ -395,18 +419,32 @@ function App() {
           </div>
         </div>
         
-        {/* Botão para cadastrar clientes */}
-        <div style={{ marginTop: '20px' }}>
+        {/* Botões para gerenciar clientes */}
+        <div style={{ marginTop: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button 
             onClick={() => setMostrarModalCliente(true)}
             className="btn-gerenciar-clientes"
           >
             <i className="fas fa-user-plus"></i> Cadastrar Cliente Fiel
           </button>
+          
+          {clientesFieis.length > 0 && (
+            <button 
+              onClick={() => setMostrarListaClientes(!mostrarListaClientes)}
+              className="btn-gerenciar-clientes"
+              style={{ background: 'linear-gradient(135deg, #FF6B6B, #FFD166)' }}
+            >
+              <i className="fas fa-users"></i> 
+              {mostrarListaClientes ? 'Ocultar' : 'Ver'} Clientes ({clientesFieis.length})
+            </button>
+          )}
         </div>
       </header>
 
       <main className="app-main">
+        {/* Botão Novo Pedido */}
+        <NovoPedidoForm onNovoPedido={criarNovoPedido} />
+        
         {/* Aviso sobre clientes cadastrados */}
         {clientesFieis.length > 0 && (
           <div style={{
@@ -420,6 +458,86 @@ function App() {
               <i className="fas fa-users"></i> 
               <strong> {clientesFieis.length} cliente(s) fiel(is) cadastrado(s)</strong>
             </p>
+          </div>
+        )}
+
+        {/* Lista de Clientes (se aberta) */}
+        {mostrarListaClientes && clientesFieis.length > 0 && (
+          <div style={{
+            background: 'white',
+            padding: '20px',
+            borderRadius: '10px',
+            marginBottom: '20px',
+            boxShadow: '0 3px 15px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <i className="fas fa-list"></i> Clientes Fiéis Cadastrados
+            </h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '15px' }}>
+              {clientesFieis.map(cliente => (
+                <div key={cliente.id} style={{
+                  background: '#f8f9fa',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  border: '1px solid #e9ecef'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <strong style={{ fontSize: '1.1em' }}>{cliente.nome}</strong>
+                      {cliente.telefone && (
+                        <div style={{ color: '#666', fontSize: '0.9em', marginTop: '5px' }}>
+                          <i className="fas fa-phone"></i> {cliente.telefone}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{
+                      background: cliente.saldo_atual > 0 ? '#ff6b6b' : '#06d6a0',
+                      color: 'white',
+                      padding: '5px 10px',
+                      borderRadius: '20px',
+                      fontSize: '0.8em',
+                      fontWeight: 'bold'
+                    }}>
+                      R$ {Math.abs(cliente.saldo_atual).toFixed(2)}
+                    </div>
+                  </div>
+                  
+                  <div style={{ marginTop: '10px', fontSize: '0.85em', color: '#666' }}>
+                    <div>Limite: R$ {cliente.limite_credito.toFixed(2)}</div>
+                    <div>Cadastro: {new Date(cliente.data_cadastro).toLocaleDateString('pt-BR')}</div>
+                    
+                    {cliente.observacoes && (
+                      <div style={{ marginTop: '5px', fontStyle: 'italic' }}>
+                        <i className="fas fa-sticky-note"></i> {cliente.observacoes}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{
+              marginTop: '20px',
+              padding: '15px',
+              background: '#e7f5ff',
+              borderRadius: '8px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div>
+                <strong>Resumo:</strong>
+                <div style={{ marginTop: '5px', fontSize: '0.9em' }}>
+                  Clientes com saldo: {clientesFieis.filter(c => c.saldo_atual > 0).length}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '1.2em', fontWeight: 'bold', color: '#dc3545' }}>
+                  Total devido: R$ {clientesFieis.reduce((soma, c) => soma + (c.saldo_atual > 0 ? c.saldo_atual : 0), 0).toFixed(2)}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
