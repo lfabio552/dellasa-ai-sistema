@@ -4,13 +4,13 @@
   "description": "Sistema de pedidos para loja de açaí",
   "main": "server.js",
   "scripts": {
-    "start": "node server-simples.js",
+    "start": "node server-supabase.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.0",
     "cors": "^2.8.5",
     "pg": "^8.11.0",
-    "dotenv": "^16.0.3"
+    "@supabase/supabase-js": "^2.38.0"
   }
 }
